@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Swagger Filter",
+  "description": "Filter Swagger JSON by selecting endpoints directly from Swagger UI.",
+  "version": "1.0",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/GANDALF.JPG",
+      "48": "icons/GANDALF.JPG",
+      "128": "icons/GANDALF.JPG"
+    },
+    "default_title": "Swagger Filter"
+  },
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
+}
