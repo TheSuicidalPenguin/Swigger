@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swagger Endpoint Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      padding: 10px;
+      width: 400px;
+    }
+    .endpoint-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+    }
+    #endpointList {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 5px;
+      cursor: pointer;
+    }
+    #fullJsonInput {
+      width: 100%;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+    #endpointInput {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Swagger Endpoint Filter</h1>
+
+  <!-- Input for Endpoints -->
+  <label for="endpointInput">Enter Endpoint:</label>
+  <input type="text" id="endpointInput" placeholder="Enter endpoint here">
+  <button id="addEndpointButton">Add Endpoint</button>
+
+  <!-- Input for Full Swagger JSON -->
+  <label for="fullJsonInput">Enter Full Swagger JSON (Postman format):</label>
+  <textarea id="fullJsonInput" placeholder="Paste full Swagger JSON here..."></textarea>
+
+  <!-- Saved Endpoints Section -->
+  <h2>Saved Endpoints:</h2>
+  <div id="endpointList"></div>
+
+  <!-- Generate Filtered Swagger JSON -->
+  <button id="generateSwaggerButton">Generate Filtered Swagger</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
