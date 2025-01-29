@@ -30,8 +30,8 @@ To run this addon locally, follow these steps:
 3. Submit a **Pull Request (PR)** for review
 
 ### Finding Features to Work On
-- Check the **Issues** section for open tasks.
-- Participate in **Discussions** to propose and collaborate on new features.
+- Check the **Issues** section for open tasks
+- Participate in **Discussions** to propose and collaborate on new features
 
 ---
 Feel free to contribute and improve the project! 🚀
