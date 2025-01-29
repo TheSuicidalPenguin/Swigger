@@ -1,7 +1,7 @@
 # Swigger
 
 ## Description
-Swigger, or **Swagger Endpoint Filter**, allows users to specify a list of API endpoints, and it generates a filtered JSON object containing only those endpoints from the Swagger documentation. This helps in managing and sharing a subset of API documentation without exposing unnecessary details.
+**Swigger**, or **Swagger Endpoint Filter**, allows users to specify a list of API endpoints, and it generates a filtered JSON object containing only those endpoints from the Swagger documentation. This helps in managing and sharing a subset of API documentation without exposing unnecessary details.
 
 ## Contribution Guidelines
 
