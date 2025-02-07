@@ -5,58 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swagger Endpoint Filter</title>
   <style>
+    /* Global Styles */
     body {
-      font-family: Arial, sans-serif;
-      margin: 10px;
-      padding: 10px;
-      width: 400px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    .container {
+      width: 90%;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 5px;
+      width: 100%;
+    }
+
+    input, textarea, button, .file-upload-wrapper {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #endpointList {
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
     .endpoint-item {
       display: flex;
       justify-content: space-between;
-      margin: 5px 0;
-    }
-    #endpointList {
-      max-height: 150px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-    }
-    button {
-      margin: 5px;
       padding: 5px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+    }
+
+    .remove-btn {
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 12px;
       cursor: pointer;
     }
-    #fullJsonInput {
-      width: 100%;
-      height: 80px;
-      margin-bottom: 10px;
+
+    .remove-btn:hover {
+      background-color: #e60000;
     }
-    #endpointInput {
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-upload-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .file-upload-wrapper:hover {
+      background-color: #45a049;
+    }
+
+    /* Popup Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      margin-bottom: 10px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-buttons {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+    }
+
+    .close-btn {
+      background-color: #ff4d4d;
+    }
+
+    .close-btn:hover {
+      background-color: #e60000;
     }
   </style>
 </head>
 <body>
 
+<div class="container">
   <h1>Swagger Endpoint Filter</h1>
 
-  <!-- Input for Endpoints -->
   <label for="endpointInput">Enter Endpoint:</label>
   <input type="text" id="endpointInput" placeholder="Enter endpoint here">
   <button id="addEndpointButton">Add Endpoint</button>
 
-  <!-- Input for Full Swagger JSON -->
   <label for="fullJsonInput">Enter Full Swagger JSON (Postman format):</label>
   <textarea id="fullJsonInput" placeholder="Paste full Swagger JSON here..."></textarea>
 
-  <!-- Saved Endpoints Section -->
   <h2>Saved Endpoints:</h2>
   <div id="endpointList"></div>
 
-  <!-- Generate Filtered Swagger JSON -->
   <button id="generateSwaggerButton">Generate Filtered Swagger</button>
 
-  <script src="popup.js"></script>
+  <label class="file-upload-wrapper">
+    <span>Upload Swagger JSON File</span>
+    <input type="file" id="jsonFileInput" accept=".json">
+  </label>
+</div>
+
+<!-- Popup Modal -->
+<div id="popupModal" class="modal">
+  <div class="modal-content">
+    <h2>Filtered Swagger JSON</h2>
+    <p>Do you want to download or view it?</p>
+    <div class="modal-buttons">
+      <button id="downloadButton">Download</button>
+      <button id="viewButton">View</button>
+    </div>
+  </div>
+</div>
+
+<script src="popup.js"></script>
 </body>
 </html>
