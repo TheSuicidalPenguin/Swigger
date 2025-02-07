@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add event listener to generate filtered swagger button
   document.getElementById('generateSwaggerButton').addEventListener('click', generateFilteredSwagger);
 });
+document.getElementById('jsonFileInput').addEventListener('change', handleFileUpload);
 
 // Add the entered endpoint to chrome storage
 function addEndpoint() {
@@ -97,14 +98,12 @@ function removeEndpoint(endpointToRemove) {
 function generateFilteredSwagger() {
   chrome.storage.local.get(['endpoints'], (result) => {
     const savedEndpoints = result.endpoints || [];
-
     if (savedEndpoints.length === 0) {
       alert('No endpoints selected!');
       return;
     }
 
     const fullJsonInput = document.getElementById('fullJsonInput').value.trim();
-
     if (!fullJsonInput) {
       alert('Please enter the full Swagger JSON!');
       return;
@@ -112,17 +111,64 @@ function generateFilteredSwagger() {
 
     const fullSwagger = JSON.parse(fullJsonInput);
 
-    // Send a message to background.js to generate the filtered Swagger JSON
     chrome.runtime.sendMessage({
       action: 'generateFilteredSwagger',
       endpoints: savedEndpoints,
       fullSwagger: fullSwagger
     }, (response) => {
       if (response && response.filteredSwagger) {
-        // Open the filtered Swagger JSON in a new tab
-        const newWindow = window.open();
-        newWindow.document.write('<pre>' + JSON.stringify(response.filteredSwagger, null, 2) + '</pre>');
+        showPopup(response.filteredSwagger);
       }
     });
   });
+}
+
+// Function to show the popup modal with the filtered Swagger JSON
+function showPopup(filteredJson) {
+  const popupModal = document.getElementById("popupModal");
+  popupModal.style.display = "flex";
+
+  document.getElementById("downloadButton").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(filteredJson, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "filtered_swagger.json";
+    link.click();
+  });
+
+  document.getElementById("viewButton").addEventListener("click", () => {
+    const newTab = window.open();
+    newTab.document.write("<pre>" + JSON.stringify(filteredJson, null, 2) + "</pre>");
+  });
+
+  document.getElementById("closeButton").addEventListener("click", () => {
+    popupModal.style.display = "none";
+  });
+}
+
+// Function to handle file upload
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+
+  if (file && file.type === 'application/json') {
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      try {
+        const jsonContent = JSON.parse(e.target.result);
+        document.getElementById('fullJsonInput').value = JSON.stringify(jsonContent, null, 2);
+        alert('JSON file loaded successfully.');
+      } catch (error) {
+        alert('Error reading JSON file: ' + error.message);
+      }
+    };
+
+    reader.onerror = function() {
+      alert('Error reading file!');
+    };
+
+    reader.readAsText(file);
+  } else {
+    alert('Please upload a valid JSON file.');
+  }
 }
