@@ -109,7 +109,13 @@ function generateFilteredSwagger() {
       return;
     }
 
-    const fullSwagger = JSON.parse(fullJsonInput);
+    let fullSwagger;
+    try {
+      fullSwagger = JSON.parse(fullJsonInput);
+    } catch (error) {
+      alert("Invalid JSON. Please check the format of the JSON input.");
+      return;
+    }
 
     chrome.runtime.sendMessage({
       action: 'generateFilteredSwagger',
@@ -159,7 +165,7 @@ function handleFileUpload(event) {
         document.getElementById('fullJsonInput').value = JSON.stringify(jsonContent, null, 2);
         alert('JSON file loaded successfully.');
       } catch (error) {
-        alert('Error reading JSON file: ' + error.message);
+        alert("Invalid JSON file. Please ensure the file contains valid JSON.");
       }
     };
 
