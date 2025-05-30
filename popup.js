@@ -7,6 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add event listener to generate filtered swagger button
   document.getElementById('generateSwaggerButton').addEventListener('click', generateFilteredSwagger);
+
+  // Get reference to the JSON error display div
+  const jsonErrorDisplay = document.getElementById('jsonErrorDisplay');
+
+  // Add event listener to fullJsonInput textarea
+  const fullJsonInput = document.getElementById('fullJsonInput');
+  fullJsonInput.addEventListener('input', () => {
+    const content = fullJsonInput.value;
+    try {
+      JSON.parse(content);
+      // JSON is valid
+      fullJsonInput.classList.remove('error');
+      jsonErrorDisplay.textContent = '';
+      jsonErrorDisplay.style.display = 'none';
+    } catch (error) {
+      // JSON is invalid
+      fullJsonInput.classList.add('error');
+      jsonErrorDisplay.textContent = 'Invalid JSON format. Check syntax.';
+      jsonErrorDisplay.style.display = 'block';
+    }
+  });
 });
 document.getElementById('jsonFileInput').addEventListener('change', handleFileUpload);
 
@@ -103,17 +124,36 @@ function generateFilteredSwagger() {
       return;
     }
 
-    const fullJsonInput = document.getElementById('fullJsonInput').value.trim();
-    if (!fullJsonInput) {
+    const fullJsonInputElement = document.getElementById('fullJsonInput');
+    // Manually trigger input event to run validation
+    fullJsonInputElement.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+
+    // Check if the input field has the 'error' class after validation
+    if (fullJsonInputElement.classList.contains('error')) {
+      alert("Cannot generate Swagger: The JSON input is invalid. Please correct the errors.");
+      return;
+    }
+
+    const fullJsonValue = fullJsonInputElement.value.trim();
+    if (!fullJsonValue) {
+      // This case should ideally be caught by the 'input' event handler if it adds .error for empty required field.
+      // Or, the validation logic in the 'input' event could be enhanced to handle emptiness.
+      // For now, keeping this check as a safeguard.
       alert('Please enter the full Swagger JSON!');
       return;
     }
 
+    // At this point, the JSON is considered valid by the UI validator.
+    // The original try-catch for JSON.parse can be removed or simplified if confidence in the UI validator is high.
+    // For safety, we can keep a try-catch, but the primary user feedback is already handled.
     let fullSwagger;
     try {
-      fullSwagger = JSON.parse(fullJsonInput);
+      fullSwagger = JSON.parse(fullJsonValue);
     } catch (error) {
-      alert("Invalid JSON. Please check the format of the JSON input.");
+      // This catch block might indicate a discrepancy between the live validator and this parse attempt,
+      // or an edge case not handled by the live validator.
+      console.error("Error parsing JSON despite passing live validation:", error);
+      alert("An unexpected error occurred while parsing the JSON. Please check its format.");
       return;
     }
 

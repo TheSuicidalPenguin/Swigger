@@ -158,6 +158,23 @@
     .close-btn:hover {
       background-color: #e60000;
     }
+
+    /* Styles for JSON input validation */
+    textarea#fullJsonInput.error {
+      text-decoration: underline;
+      text-decoration-style: wavy;
+      text-decoration-color: red;
+      /* Fallback border if wavy underline is not supported or desired */
+      /* border: 2px solid red; */
+    }
+
+    #jsonErrorDisplay {
+      color: red;
+      font-size: 0.9em; /* Equivalent to 12.6px if base is 14px, close to 12px */
+      margin-top: 5px;
+      /* margin-bottom is managed by the next element or general spacing */
+      /* display: none; is handled by JS initially and on valid input */
+    }
   </style>
 </head>
 <body>
@@ -171,6 +188,7 @@
 
   <label for="fullJsonInput">Enter Full Swagger JSON (Postman format):</label>
   <textarea id="fullJsonInput" placeholder="Paste full Swagger JSON here..."></textarea>
+  <div id="jsonErrorDisplay" style="display: none;"></div>
 
   <h2>Saved Endpoints:</h2>
   <div id="endpointList"></div>
